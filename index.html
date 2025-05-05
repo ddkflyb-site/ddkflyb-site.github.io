@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenisysMax - Открытое ядро для Minecraft PE серверов</title>
+    <style>
+        /* Базовые стили и сброс */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 1.5rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        header.scrolled {
+            padding: 0.8rem 0;
+            background-color: rgba(0, 0, 0, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 1rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffffff, #a0a0a0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Главная секция */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 20%, #121212 70%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(45deg, #ffffff, #a0a0a0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #cccccc;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Секция особенностей */
+        .features {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, #ffffff, transparent);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .feature-card p {
+            color: #b0b0b0;
+            line-height: 1.7;
+        }
+
+        /* CTA Секция */
+        .cta {
+            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #ffffff;
+        }
+
+        .cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #b0b0b0;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #ffffff;
+            color: #121212;
+            text-decoration: none;
+            padding: 0.8rem 2.5rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:hover {
+            background: transparent;
+            color: #ffffff;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0a0a0a;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-content p {
+            color: #777777;
+            margin-top: 1rem;
+        }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+        }
+
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 1.5rem;
+            }
+            
+            .logo img {
+                height: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header id="header">
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo.jpg" alt="GenisysMax Logo">
+                <h1>GenisysMax</h1>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <h1>Альфа-релиз GenisysMax</h1>
+            <p>Открытое ядро для Minecraft PE серверов, вдохновлённое архитектурой GenisysPro. Полностью переработанное ядро с упором на стабильность, производительность и совместимость.</p>
+            <a href="#features" class="btn">Узнать больше</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title">Ключевые особенности</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Широкая поддержка версий</h3>
+                <p>Поддержка версий Minecraft PE от 1.1 до 1.21. Сервер работает с широким спектром клиентов без необходимости в прокси или сторонних решений.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Максимальная оптимизация</h3>
+                <p>Упор на низкий отклик, экономию ресурсов и масштабируемость. Ядро оптимизировано для высокой производительности даже при большой нагрузке.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Стабильное API 3.28.0</h3>
+                <p>Удобно для разработчиков, с полной документацией и ясной архитектурой. Создавайте мощные плагины с минимальными усилиями.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Открытый исходный код</h3>
+                <p>GenisysMax доступен для изучения, модификации и развития вместе с сообществом. Присоединяйтесь к проекту и внесите свой вклад!</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="cta-content">
+            <h2>Готовы попробовать?</h2>
+            <p>Сейчас доступна альфа-версия. Ожидаются багфиксы и улучшения, но основа уже готова к использованию и разработке плагинов.</p>
+            <a href="https://github.com/GenisysMax/GenisysMax" class="btn" download>Скачать альфа-версию</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <img src="logo.jpg" alt="GenisysMax Logo" style="height: 40px; border-radius: 5px;">
+            <p>© 2025 GenisysMax. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Анимация заголовка при прокрутке
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Анимация появления карточек при прокрутке
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.feature-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 150);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+            
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+
+        // Создание частиц для фонового эффекта
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Случайные размеры и позиции
+                const size = Math.random() * 4 + 1;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const opacity = Math.random() * 0.5 + 0.1;
+                const delay = Math.random() * 5;
+                const duration = Math.random() * 20 + 10;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.opacity = opacity;
+                particle.style.animation = `fadeIn ${duration}s infinite ease-in-out ${delay}s alternate`;
+                
+                particlesContainer.appendChild(particle);
+            }
+        });
+
+        // Плавная прокрутка для внутренних ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
