@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GenisysMax - JavaScript Plugin Documentation</title>
+    <style>
+        /* Global Styles */
+        :root {
+            -- Kanada
+            --primary-color: #000;
+            --secondary-color: #333;
+            --accent-color: #888;
+            --background-color: #fff;
+            --light-gray: #f0f0f0;
+            --border-color: #ddd;
+            --hover-color: #555;
+            --code-bg: #f5f5f5;
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--primary-color);
+            line-height: 1.6;
+            padding-top: 80px;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all var(--transition-speed) ease;
+        }
+
+        header.scrolled {
+            padding: 8px 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 15px;
+            border-radius: 8px;
+            transition: transform var(--transition-speed);
+        }
+
+        .logo:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .site-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .content {
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 120px);
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+
+        .toc {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            animation: slideInLeft 0.7s ease-out;
+        }
+
+        .toc h2 {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc-level-1 {
+            margin-bottom: 10px;
+        }
+
+        .toc-level-2 {
+            padding-left: 15px;
+            margin-bottom: 5px;
+        }
+
+        .toc a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            display: block;
+            padding: 5px 0;
+            transition: all var(--transition-speed);
+            border-left: 3px solid transparent;
+            padding-left: 10px;
+        }
+
+        .toc a:hover, 
+        .toc a.active {
+            color: var(--primary-color);
+            border-left: 3px solid var(--primary-color);
+            padding-left: 15px;
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Main Article */
+        main {
+            flex: 1;
+            padding: 20px 0;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background-color: var(--background-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: transform var(--transition-speed) ease;
+        }
+
+        section:hover {
+            transform: translateY(-5px);
+        }
+
+        h1, h2, h3, h4 {
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            margin-top: 20px;
+        }
+
+        p {
+            margin-bottom: 20px;
+        }
+
+        ul, ol {
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* Code blocks */
+        code {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background-color: var(--code-bg);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            border: 1px solid var(--border-color);
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            padding: 15px;
+            overflow-x: auto;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            border: none;
+            display: block;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+            }
+        }
+
+        .highlight {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1024px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            aside {
+                width: 100%;
+                position: relative;
+                top: 0;
+                height: auto;
+                margin-bottom: 20px;
+            }
+            
+            .toc {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            
+            .site-title {
+                font-size: 1.4rem;
+            }
+            
+            .logo {
+                width: 40px;
+                height: 40px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            section {
+                padding: 20px;
+            }
+        }
+
+        /* Additional styling for tables */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: var(--light-gray);
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light-gray);
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            padding: 8px 16px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-right: 10px;
+            transition: all var(--transition-speed);
+        }
+
+        .btn:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Special elements */
+        .note {
+            background-color: var(--light-gray);
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .warning {
+            background-color: rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--primary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--primary-color);
+            color: var(--background-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            transition: all var(--transition-speed);
+            z-index: 99;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+        }
+
+        .back-to-top:hover {
+            background-color: var(--hover-color);
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <img src="logo.jpg" alt="GenisysMax Logo" class="logo">
+            <h1 class="site-title">GenisysMax</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="content">
+            <aside>
+                <div class="toc">
+                    <h2>Содержание</h2>
+                    <ul>
+                        <li class="toc-level-1"><a href="#введение">Введение</a></li>
+                        <li class="toc-level-1"><a href="#установка-и-настройка">Установка и настройка</a>
+                            <ul>
+                                <li class="toc-level-2"><a href="#системные-требования">Системные требования</a></li>
+                                <li class="toc-level-2"><a href="#установка-системы-js-плагинов">Установка системы JS-плагинов</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-level-1"><a href="#структура-js-плагина">Структура JS-плагина</a>
+                            <ul>
+                                <li class="toc-level-2"><a href="#блок-метаданных">Блок метаданных</a></li>
+                                <li class="toc-level-2"><a href="#функции-жизненного-цикла">Функции жизненного цикла</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-level-1"><a href="#api-для-javascript-плагинов">API для JavaScript-плагинов</a>
+                            <ul>
+                                <li class="toc-level-2"><a href="#консоль-и-логирование">Консоль и логирование</a></li>
+                                <li class="toc-level-2"><a href="#сервер">Сервер</a></li>
+                                <li class="toc-level-2"><a href="#плагин">Плагин</a></li>
+                                <li class="toc-level-2"><a href="#события">События</a></li>
+                                <li class="toc-level-2"><a href="#команды">Команды</a></li>
+                                <li class="toc-level-2"><a href="#конфигурации">Конфигурации</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-level-1"><a href="#примеры-плагинов">Примеры плагинов</a>
+                            <ul>
+                                <li class="toc-level-2"><a href="#простой-плагин-приветствие">Простой плагин-приветствие</a></li>
+                                <li class="toc-level-2"><a href="#плагин-с-командами">Плагин с командами</a></li>
+                                <li class="toc-level-2"><a href="#плагин-с-настройками">Плагин с настройками</a></li>
+                            </ul>
+                        </li>
+                        <li class="toc-level-1"><a href="#лучшие-практики">Лучшие практики</a></li>
+                        <li class="toc-level-1"><a href="#отладка">Отладка</a></li>
+                        <li class="toc-level-1"><a href="#часто-задаваемые-вопросы">Часто задаваемые вопросы</a></li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main>
+                <section id="введение">
+                    <h1>Документация по написанию JavaScript-плагинов для PocketMine-MP</h1>
+                    <p>Система JS-плагинов для PocketMine-MP позволяет разрабатывать плагины на JavaScript без необходимости установки Node.js или других зависимостей. Эта документация содержит полное руководство по созданию, настройке и отладке JavaScript-плагинов для вашего сервера.</p>
+
+                    <p>JavaScript-плагины имеют следующие преимущества:</p>
+                    <ul>
+                        <li>Простой синтаксис, доступный для начинающих разработчиков</li>
+                        <li>Быстрая разработка без необходимости компиляции</li>
+                        <li>Возможность модификации кода без перезапуска сервера</li>
+                        <li>Доступ ко всем основным API PocketMine-MP</li>
+                    </ul>
+                </section>
+
+                <section id="установка-и-настройка">
+                    <h2>Установка и настройка</h2>
+                    
+                    <h3 id="системные-требования">Системные требования</h3>
+                    <p>Для работы JS-плагинов необходимы:</p>
+                    <ul>
+                        <li>PocketMine-MP версии 3.28.0 или выше с установленным JSPluginLoader</li>
+                        <li>PHP 8.3 или выше</li>
+                    </ul>
+
+                    <p>Для повышения производительности рекомендуется установить PHP-расширение V8Js:</p>
+                    <pre><code># Для Debian/Ubuntu
+sudo apt-get install php-v8js
+
+# Для Windows с XAMPP необходимо скачать соответствующее расширение
+# и добавить extension=v8js в php.ini</code></pre>
+
+                    <p>Если расширение V8Js не установлено, будет использоваться встроенный интерпретатор JavaScript, который обеспечивает базовую функциональность, но имеет ограничения в производительности.</p>
+
+                    <h3 id="установка-системы-js-плагинов">Установка системы JS-плагинов</h3>
+                    <ol>
+                        <li>Убедитесь, что файл <code>JSPluginLoader.php</code> добавлен в исходный код вашего форка PocketMine-MP (папка <code>src/pocketmine/plugin/</code>)</li>
+                        <li>Создайте папку <code>plugins</code> в корне вашего сервера, если она еще не существует</li>
+                        <li>Поместите JavaScript-плагины (файлы с расширением .js) в папку <code>plugins</code></li>
+                        <li>При запуске сервера все JS-плагины будут автоматически загружены и инициализированы</li>
+                    </ol>
+                </section>
+
+                <section id="структура-js-плагина">
+                    <h2>Структура JS-плагина</h2>
+                    <p>Каждый JavaScript-плагин состоит из одного .js файла, который содержит:</p>
+                    <ol>
+                        <li><strong>Блок метаданных</strong> - информация о плагине (обязательно)</li>
+                        <li><strong>Функции жизненного цикла</strong> - функции, которые вызываются при загрузке, включении и выключении плагина</li>
+                        <li><strong>Пользовательские функции</strong> - дополнительные функции для реализации логики плагина</li>
+                    </ol>
+
+                    <h3 id="блок-метаданных">Блок метаданных</h3>
+                    <p>Метаданные плагина определяются в комментарии в начале файла в формате YAML:</p>
+                    <pre><code>/**PLUGIN
+name: МойПлагин
+version: 1.0.0
+api: 3.28.0
+main: МойПлагин
+author: ВашеИмя
+description: Описание вашего плагина
+**/</code></pre>
+
+                    <p>Обязательные поля:</p>
+                    <ul>
+                        <li><code>name</code>: Имя плагина</li>
+                        <li><code>version</code>: Версия плагина</li>
+                        <li><code>api</code>: Версия API PocketMine-MP</li>
+                        <li><code>main</code>: Точка входа (обычно совпадает с именем плагина)</li>
+                    </ul>
+
+                    <p>Необязательные поля:</p>
+                    <ul>
+                        <li><code>author</code>: Автор плагина</li>
+                        <li><code>description</code>: Описание плагина</li>
+                        <li><code>website</code>: Сайт плагина</li>
+                        <li><code>depend</code>: Зависимости (другие плагины)</li>
+                    </ul>
+
+                    <h3 id="функции-жизненного-цикла">Функции жизненного цикла</h3>
+                    <p>Каждый плагин должен содержать по крайней мере одну из следующих функций:</p>
+                    <pre><code>// Вызывается при загрузке плагина (до загрузки карты мира)
+function onLoad() {
+    console.log("Плагин загружается...");
+}
+
+// Вызывается при включении плагина (после загрузки мира)
+function onEnable() {
+    console.log("Плагин включен!");
+    // Здесь регистрируются события, команды и т.д.
+}
+
+// Вызывается при выключении плагина (при остановке сервера)
+function onDisable() {
+    console.log("Плагин выключен!");
+    // Здесь освобождаются ресурсы, сохраняются данные и т.д.
+}</code></pre>
+                </section>
+
+                <section id="api-для-javascript-плагинов">
+                    <h2>API для JavaScript-плагинов</h2>
+                    <p>JavaScript-плагины имеют доступ к следующим объектам и методам:</p>
+
+                    <h3 id="консоль-и-логирование">Консоль и логирование</h3>
+                    <p>Объект <code>console</code> позволяет выводить сообщения в консоль сервера:</p>
+                    <pre><code>console.log("Информационное сообщение"); // Обычное сообщение
+console.warn("Предупреждение");          // Предупреждение
+console.error("Ошибка");                 // Сообщение об ошибке</code></pre>
+
+                    <h3 id="сервер">Сервер</h3>
+                    <p>Объект <code>server</code> предоставляет доступ к информации о сервере и его функциям:</p>
+                    <pre><code>// Получение информации о сервере
+const serverName = server.getName();         // Имя сервера
+const serverVersion = server.getVersion();   // Версия PocketMine-MP
+const apiVersion = server.getApiVersion();   // Версия API
+
+// Работа с игроками
+const players = server.getOnlinePlayers();   // Список всех онлайн-игроков
+
+// Отправка сообщений
+server.broadcastMessage("Сообщение всем игрокам");</code></pre>
+
+                    <p>Пример работы с игроками:</p>
+                    <pre><code>const onlinePlayers = server.getOnlinePlayers();
+console.log(`Сейчас онлайн: ${onlinePlayers.length} игроков`);
+
+// Перебор всех игроков
+for (let i = 0; i < onlinePlayers.length; i++) {
+    const player = onlinePlayers[i];
+    console.log(`Игрок ${player.name} с пингом ${player.ping}ms`);
+}</code></pre>
+
+                    <h3 id="плагин">Плагин</h3>
+                    <p>Объект <code>plugin</code> предоставляет доступ к информации о текущем плагине:</p>
+                    <pre><code>const pluginName = plugin.getName();             // Имя плагина
+const dataFolder = plugin.getDataFolder();       // Путь к папке данных плагина
+
+// Работа с ресурсами
+plugin.saveResource("config.yml", false);        // Сохраняет встроенный ресурс в папку плагина
+const resourceData = plugin.getResource("data.txt"); // Получает данные встроенного ресурса</code></pre>
+
+                    <h3 id="события">События</h3>
+                    <p>Система <code>events</code> позволяет регистрировать обработчики событий сервера:</p>
+                    <pre><code>events.register(eventName, callback, priority);</code></pre>
+
+                    <p>Параметры:</p>
+                    <ul>
+                        <li><code>eventName</code>: Название события в формате "категория.СобытиеКласс"</li>
+                        <li><code>callback</code>: Функция-обработчик, принимающая объект события</li>
+                        <li><code>priority</code>: Приоритет обработчика (lowest, low, normal, high, highest, monitor)</li>
+                    </ul>
+
+                    <p>Примеры регистрации обработчиков:</p>
+                    <pre><code>// Обработка входа игрока
+events.register("player.PlayerJoinEvent", function(event) {
+    console.log(`Игрок ${event.player.name} вошел на сервер`);
+});
+
+// Обработка выхода игрока
+events.register("player.PlayerQuitEvent", function(event) {
+    console.log(`Игрок ${event.player.name} вышел с сервера`);
+});
+
+// Обработка чата с высоким приоритетом
+events.register("player.PlayerChatEvent", function(event) {
+    // Можно изменять данные события
+    event.message = event.message.toUpperCase();
+}, "high");
+
+// Мониторинг блоков
+events.register("block.BlockBreakEvent", function(event) {
+    const player = event.player;
+    const block = event.block;
+    console.log(`${player.name} сломал блок ${block.name} на координатах ${block.x}, ${block.y}, ${block.z}`);
+});</code></pre>
+
+                    <h4>Список основных событий</h4>
+                    <div class="note">
+                        <p><strong>События игроков:</strong></p>
+                        <ul>
+                            <li><code>player.PlayerJoinEvent</code> - вход игрока на сервер</li>
+                            <li><code>player.PlayerQuitEvent</code> - выход игрока с сервера</li>
+                            <li><code>player.PlayerChatEvent</code> - сообщение игрока в чате</li>
+                            <li><code>player.PlayerDeathEvent</code> - смерть игрока</li>
+                            <li><code>player.PlayerMoveEvent</code> - перемещение игрока</li>
+                            <li><code>player.PlayerInteractEvent</code> - взаимодействие игрока с объектом</li>
+                        </ul>
+                        
+                        <p><strong>События блоков:</strong></p>
+                        <ul>
+                            <li><code>block.BlockBreakEvent</code> - разрушение блока</li>
+                            <li><code>block.BlockPlaceEvent</code> - размещение блока</li>
+                            <li><code>block.SignChangeEvent</code> - изменение текста на табличке</li>
+                        </ul>
+                        
+                        <p><strong>События сущностей:</strong></p>
+                        <ul>
+                            <li><code>entity.EntityDamageEvent</code> - получение урона сущностью</li>
+                            <li><code>entity.EntityDamageByEntityEvent</code> - получение урона от другой сущности</li>
+                        </ul>
+                        
+                        <p><strong>События сервера:</strong></p>
+                        <ul>
+                            <li><code>server.QueryRegenerateEvent</code> - обновление статуса сервера</li>
+                            <li><code>server.DataPacketReceiveEvent</code> - получение пакета данных</li>
+                        </ul>
+                    </div>
+
+                    <h3 id="команды">Команды</h3>
+                    <p>Система <code>command</code> позволяет регистрировать собственные команды:</p>
+                    <pre><code>command.register(name, description, usage, aliases, callback);</code></pre>
+
+                    <p>Параметры:</p>
+                    <ul>
+                        <li><code>name</code>: Основное имя команды</li>
+                        <li><code>description</code>: Описание команды</li>
+                        <li><code>usage</code>: Подсказка по использованию</li>
+                        <li><code>aliases</code>: Альтернативные имена (через запятую)</li>
+                        <li><code>callback</code>: Функция-обработчик команды</li>
+                    </ul>
+
+                    <p>Пример регистрации команды:</p>
+                    <pre><code>command.register("heal", "Восстанавливает здоровье", "/heal [игрок]", "h,health", function(sender, command, label, args) {
+    // sender - объект отправителя команды
+    // command - имя команды
+    // label - использованное имя команды (основное или псевдоним)
+    // args - массив аргументов
+
+    if (sender.isConsole) {
+        console.log("Эта команда доступна только для игроков");
+        return false;
+    }
+    
+    server.broadcastMessage(`${sender.name} восстановил здоровье!`);
+    return true; // true - команда выполнена успешно
+});</code></pre>
+
+                    <h3 id="конфигурации">Конфигурации</h3>
+                    <p>Система <code>config</code> позволяет работать с конфигурационными файлами:</p>
+                    <pre><code>// Загрузка конфигурации
+const data = config.load(filename);
+
+// Сохранение конфигурации
+config.save(filename, data);</code></pre>
+
+                    <p>Поддерживаемые форматы:</p>
+                    <ul>
+                        <li>JSON (.json)</li>
+                        <li>YAML (.yml, .yaml)</li>
+                        <li>Properties (.properties, .cnf)</li>
+                    </ul>
+
+                    <p>Пример работы с конфигурацией:</p>
+                    <pre><code>function loadConfig() {
+    // Загружаем конфигурацию или создаем новую
+    let cfg = config.load("settings.json");
+    
+    if (cfg === null) {
+        // Конфигурация отсутствует, создаем по умолчанию
+        cfg = {
+            "welcome-message": "Добро пожаловать на сервер!",
+            "broadcast-joins": true,
+            "custom-settings": {
+                "feature-1": true,
+                "feature-2": false
+            }
+        };
+        
+        // Сохраняем конфигурацию по умолчанию
+        config.save("settings.json", cfg);
+        console.log("Создана конфигурация по умолчанию");
+    }
+    
+    return cfg;
+}
+
+// Использование
+const settings = loadConfig();
+console.log(`Приветственное сообщение: ${settings["welcome-message"]}`);
+</code></pre>
+                </section>
+
+                <section id="примеры-плагинов">
+                    <h2>Примеры плагинов</h2>
+
+                    <h3 id="простой-плагин-приветствие">Простой плагин-приветствие</h3>
+                    <p>Этот плагин отправляет приветственное сообщение игрокам при входе на сервер:</p>
+                    <pre><code>/**PLUGIN
+name: WelcomePlugin
+version: 1.0.0
+api: 3.28.0
+main: WelcomePlugin
+author: YourName
+description: Приветствует игроков при входе на сервер
+**/
+
+function onEnable() {
+    console.log("WelcomePlugin включен!");
+    
+    // Регистрируем обработчик входа игрока
+    events.register("player.PlayerJoinEvent", function(event) {
+        const playerName = event.player.name;
+        
+        // Через 1 секунду после входа отправляем приветствие
+        setTimeout(function() {
+            server.broadcastMessage(`§e===== §aДобро пожаловать, §b${playerName}§a! §e=====`);
+        }, 1000);
+    });
+}
+
+function onDisable() {
+    console.log("WelcomePlugin выключен!");
+}
+</code></pre>
+
+                    <h3 id="плагин-с-командами">Плагин с командами</h3>
+                    <p>Плагин добавляет команды для управления временем:</p>
+                    <pre><code>/**PLUGIN
+name: TimeControl
+version: 1.0.0
+api: 3.28.0
+main: TimeControl
+author: YourName
+description: Управление временем на сервере
+**/
+
+function onEnable() {
+    console.log("TimeControl включен!");
+    
+    // Команда установки дня
+    command.register("day", "Устанавливает день", "/day", "daytime", function(sender, command, label, args) {
+        server.broadcastMessage(`§e${sender.name} §aустановил день!`);
+        // В реальном плагине здесь был бы код установки времени
+        return true;
+    });
+    
+    // Команда установки ночи
+    command.register("night", "Устанавливает ночь", "/night", "nighttime", function(sender, command, label, args) {
+        server.broadcastMessage(`§e${sender.name} §aустановил ночь!`);
+        // В реальном плагине здесь был бы код установки времени
+        return true;
+    });
+}
+
+function onDisable() {
+    console.log("TimeControl выключен!");
+}
+</code></pre>
+
+                    <h3 id="плагин-с-настройками">Плагин с настройками</h3>
+                    <p>Плагин с настройками, которые можно изменять:</p>
+                    <pre><code>/**PLUGIN
+name: ConfigExample
+version: 1.0.0
+api: 3.28.0
+main: ConfigExample
+author: YourName
+description: Пример работы с конфигурациями
+**/
+
+// Глобальные переменные для настроек
+let settings = {};
+
+function onEnable() {
+    console.log("ConfigExample включен!");
+    
+    // Загружаем настройки
+    loadConfig();
+    
+    // Регистрируем команду для просмотра настроек
+    command.register("config", "Управление настройками", "/config [set|reload]", "cfg", function(sender, command, label, args) {
+        if (args.length === 0) {
+            // Показываем текущие настройки
+            let message = "§aТекущие настройки:\n";
+            message += `§b- §eРежим отладки: §f${settings.debug ? "Включен" : "Выключен"}\n`;
+            message += `§b- §eПриветствие: §f${settings.welcome}\n`;
+            server.broadcastMessage(message);
+            return true;
+        }
+        
+        if (args[0] === "reload") {
+            loadConfig();
+            server.broadcastMessage("§aНастройки перезагружены!");
+            return true;
+        }
+        
+        return true;
+    });
+    
+    // Регистрируем обработчик входа игрока
+    events.register("player.PlayerJoinEvent", function(event) {
+        if (settings.debug) {
+            console.log(`Отладка: игрок ${event.player.name} вошел на сервер`);
+        }
+        
+        if (settings.showWelcome) {
+            server.broadcastMessage(`${settings.welcome.replace("{player}", event.player.name)}`);
+        }
+    });
+}
+
+function loadConfig() {
+    // Загружаем настройки или создаем конфигурацию по умолчанию
+    let cfg = config.load("settings.json");
+    
+    if (cfg === null) {
+        // Создаем конфигурацию по умолчанию
+        cfg = {
+            "debug": false,
+            "showWelcome": true,
+            "welcome": "§aДобро пожаловать на сервер, §e{player}§a!"
+        };
+        
+        // Сохраняем конфигурацию
+        config.save("settings.json", cfg);
+        console.log("Создана конфигурация по умолчанию");
+    }
+    
+    // Обновляем глобальные настройки
+    settings = cfg;
+    console.log("Конфигурация загружена");
+}
+
+function onDisable() {
+    console.log("ConfigExample выключен!");
+}
+</code></pre>
+                </section>
+
+                <section id="лучшие-практики">
+                    <h2>Лучшие практики</h2>
+                    <h3>Оптимизация</h3>
+                    <ol>
+                        <li><strong>Минимизируйте использование событий с высокой частотой срабатывания</strong> - такие события как <code>PlayerMoveEvent</code> могут вызываться очень часто и создавать нагрузку на сервер.</li>
+                        <li><strong>Используйте асинхронные операции</strong> для длительных задач:</li>
+                        <pre><code>// Пример асинхронной операции
+setTimeout(function() {
+    // Код, который выполнится через 1 секунду
+}, 1000);
+</code></pre>
+                        <li><strong>Кэшируйте часто используемые данные</strong> вместо повторного чтения файлов.</li>
+                    </ol>
+
+                    <h3>Безопасность</h3>
+                    <ol>
+                        <li><strong>Проверяйте права доступа</strong> перед выполнением команд:</li>
+                        <pre><code>if (!sender.isPlayer) {
+    console.log("Эта команда доступна только для игроков");
+    return false;
+}
+</code></pre>
+                        <li><strong>Валидируйте все пользовательские данные</strong> перед использованием.</li>
+                        <li><strong>Избегайте жесткого кодирования</strong> паролей и других чувствительных данных.</li>
+                    </ol>
+
+                    <h3>Структура кода</h3>
+                    <ol>
+                        <li><strong>Разделяйте код на функции</strong> для лучшей читаемости и поддерживаемости:</li>
+                        <pre><code>function handlePlayerJoin(event) {
+    // Обработка входа игрока
+}
+function handlePlayerQuit(event) {
+    // Обработка выхода игрока
+}
+function onEnable() {
+    events.register("player.PlayerJoinEvent", handlePlayerJoin);
+    events.register("player.PlayerQuitEvent", handlePlayerQuit);
+}
+</code></pre>
+                        <li><strong>Используйте конфигурации</strong> для настраиваемых параметров вместо хардкода.</li>
+                        <li><strong>Комментируйте сложный код</strong> для облегчения дальнейшей поддержки.</li>
+                    </ol>
+                </section>
+
+                <section id="отладка">
+                    <h2>Отладка</h2>
+                    <h3>Логирование</h3>
+                    <p>Используйте функции консоли для отладки:</p>
+                    <pre><code>console.log("Отладочная информация");
+console.warn("Предупреждение");
+console.error("Ошибка");
+</code></pre>
+
+                    <h3>Режим отладки</h3>
+                    <p>Добавьте переключатель режима отладки в вашу конфигурацию:</p>
+                    <pre><code>let debug = false;
+
+ —
+
+function onEnable() {
+    // Загружаем конфигурацию
+    let cfg = config.load("settings.json");
+    if (cfg && cfg.debug) {
+        debug = true;
+        console.log("Режим отладки включен");
+    }
+    
+    // ...
+}
+
+function logDebug(message) {
+    if (debug) {
+        console.log(`[DEBUG] ${message}`);
+    }
+}
+</code></pre>
+
+                    <h3>Проверка синтаксиса</h3>
+                    <p>При возникновении ошибок в плагине проверьте:</p>
+                    <ol>
+                        <li>Правильность блока метаданных</li>
+                        <li>Корректность JavaScript-синтаксиса</li>
+                        <li>Наличие всех необходимых функций</li>
+                        <li>Правильность имен событий и команд</li>
+                    </ol>
+                </section>
+
+                <section id="часто-задаваемые-вопросы">
+                    <h2>Часто задаваемые вопросы</h2>
+                    <h3>Общие вопросы</h3>
+                    <p><strong>В: Могу ли я использовать ES6 и современные функции JavaScript?</strong></p>
+                    <p>О: Да, если вы используете расширение V8Js. Встроенный интерпретатор поддерживает только базовый JavaScript.</p>
+
+                    <p><strong>В: Как мне добавить зависимость от другого плагина?</strong></p>
+                    <p>О: Укажите зависимость в блоке метаданных:</p>
+                    <pre><code>/**PLUGIN
+name: МойПлагин
+version: 1.0.0
+api: 3.28.0
+depends: ["ЗависимыйПлагин"]
+**/</code></pre>
+
+                    <p><strong>В: Что делать, если мой плагин не загружается?</strong></p>
+                    <p>О: Проверьте консоль сервера на наличие ошибок. Убедитесь, что формат метаданных правильный и файл сохранен в UTF-8.</p>
+
+                    <h3>Технические вопросы</h3>
+                    <p><strong>В: Как обновить плагин без перезапуска сервера?</strong></p>
+                    <p>О: Выгрузите плагин с помощью команды <code>/plugins</code> (если применимо), затем замените файл .js и снова загрузите плагин.</p>
+
+                    <p><strong>В: Можно ли использовать внешние библиотеки JavaScript?</strong></p>
+                    <p>О: Да, вы можете включить код библиотеки в ваш файл плагина. Однако учтите, что это увеличит размер файла.</p>
+
+                    <p><strong>В: Ограничено ли количество JS-плагинов?</strong></p>
+                    <p>О: Нет технических ограничений на количество JS-плагинов, но большое количество тяжелых плагинов может снизить производительность.</p>
+
+                    <h3>Расширенные возможности</h3>
+                    <p><strong>В: Могу ли я создавать собственные события?</strong></p>
+                    <p>О: Напрямую нет, но вы можете реализовать собственную систему событий через глобальные функции.</p>
+
+                    <p><strong>В: Как работать с базами данных?</strong></p>
+                    <p>О: Встроенной поддержки баз данных нет, но вы можете хранить данные в JSON-файлах:</p>
+                    <pre><code>function saveData(data) {
+    config.save("database.json", data);
+}
+
+function loadData() {
+    return config.load("database.json") || {};
+}
+</code></pre>
+
+                    <p><strong>В: Могу ли я создавать пользовательские интерфейсы (формы)?</strong></p>
+                    <p>О: Для этого вам потребуется использовать API PocketMine-MP для форм через функции переадресации команд.</p>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div class="back-to-top">↑</div>
+
+    <script>
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Back to top button
+        const backToTop = document.querySelector('.back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Table of Contents active link
+        const tocLinks = document.querySelectorAll('.toc a');
+        const sections = document.querySelectorAll('main section');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (window.scrollY >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            tocLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll for TOC links
+        tocLinks.forEach(link => {
+            link.addEventListener('click Tinkerbell', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
