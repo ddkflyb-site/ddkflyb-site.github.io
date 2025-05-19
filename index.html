@@ -3,438 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GenisysMax - Открытое ядро для Minecraft PE серверов</title>
+    <title>Зал Славы Киры</title>
     <style>
-        /* Базовые стили и сброс */
-        * {
+        :root {
+            --pink-light: #ffcce6;
+            --pink-main: #ff99cc;
+            --pink-dark: #ff66b3;
+            --purple-light: #e6ccff;
+            --purple-main: #cc99ff;
+            --purple-dark: #aa66ff;
+        }
+        
+        body {
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--pink-light);
+            background-image: url('/api/placeholder/400/400');
+            background-repeat: repeat;
+            background-size: 100px;
+            background-attachment: fixed;
+            color: #333;
         }
-
-        body {
-            background-color: #121212;
-            color: #f0f0f0;
-            line-height: 1.6;
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 20px;
+            box-shadow: 0 0 20px rgba(255, 102, 179, 0.5);
         }
-
-        /* Header */
+        
         header {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 1.5rem 0;
-            position: fixed;
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--pink-main), var(--purple-main));
+            border-radius: 15px 15px 0 0;
+            margin-bottom: 20px;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        header h1 {
+            color: white;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        header p {
+            color: white;
+            margin: 10px 0 0;
+            font-size: 1.2em;
+            font-style: italic;
+        }
+        
+        .hello-kitty {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            top: -20px;
+            right: 20px;
+            background-image: url('/api/placeholder/60/60');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .kitty-bow {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top: -15px;
+            left: 20px;
+            background-image: url('/api/placeholder/40/40');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+        
+        .post-form {
+            background-color: var(--purple-light);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .post-form h2 {
+            color: var(--purple-dark);
+            margin-top: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--purple-dark);
+            font-weight: bold;
+        }
+        
+        .form-group input, 
+        .form-group textarea {
             width: 100%;
-            top: 0;
-            z-index: 1000;
+            padding: 10px;
+            border: 2px solid var(--pink-main);
+            border-radius: 10px;
+            background-color: white;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+        
+        .form-group input[type="file"] {
+            border: none;
+            padding: 10px 0;
+        }
+        
+        button {
+            background: linear-gradient(to right, var(--pink-main), var(--purple-main));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-
-        header.scrolled {
-            padding: 0.8rem 0;
-            background-color: rgba(0, 0, 0, 0.95);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.15);
         }
-
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-        }
-
-        .logo img {
-            height: 50px;
-            margin-right: 1rem;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
-
-        .logo img:hover {
-            transform: scale(1.05);
-        }
-
-        .logo h1 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #ffffff, #a0a0a0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Главная секция */
-        .hero {
-            height: 100vh;
+        
+        .posts-container {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 2rem;
-            position: relative;
-            overflow: hidden;
-            background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+            gap: 30px;
         }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        
+        .post {
+            background-color: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--pink-main);
+            position: relative;
+        }
+        
+        .post-header {
+            margin-bottom: 15px;
+            border-bottom: 2px dashed var(--purple-light);
+            padding-bottom: 10px;
+        }
+        
+        .post-title {
+            color: var(--purple-dark);
+            margin: 0 0 10px 0;
+            font-size: 1.8em;
+        }
+        
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .post-content {
+            line-height: 1.6;
+        }
+        
+        .post-image {
             width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, transparent 20%, #121212 70%);
-            z-index: 1;
+            max-height: 400px;
+            object-fit: contain;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
         }
-
-        .hero-content {
-            max-width: 800px;
-            position: relative;
-            z-index: 10;
-            animation: fadeIn 1s ease-out;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            background: linear-gradient(45deg, #ffffff, #a0a0a0);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #cccccc;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Секция особенностей */
-        .features {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            position: relative;
-            font-weight: 700;
-        }
-
-        .section-title::after {
-            content: '';
+        
+        .kitty-decoration {
             position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, #ffffff, transparent);
+            width: 30px;
+            height: 30px;
+            background-image: url('/api/placeholder/30/30');
+            background-size: contain;
+            background-repeat: no-repeat;
+            top: -10px;
+            right: 10px;
         }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2.5rem;
-            margin-top: 2rem;
-        }
-
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .feature-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #ffffff;
-        }
-
-        .feature-card p {
-            color: #b0b0b0;
-            line-height: 1.7;
-        }
-
-        /* CTA Секция */
-        .cta {
-            background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
-            padding: 5rem 2rem;
-            text-align: center;
-        }
-
-        .cta-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-            color: #ffffff;
-        }
-
-        .cta p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #b0b0b0;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #ffffff;
-            color: #121212;
-            text-decoration: none;
-            padding: 0.8rem 2.5rem;
-            border-radius: 30px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: 2px solid #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.15);
-        }
-
-        .btn:hover {
-            background: transparent;
-            color: #ffffff;
-            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Footer */
+        
         footer {
-            background-color: #0a0a0a;
-            padding: 3rem 2rem;
             text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--pink-main), var(--purple-main));
+            border-radius: 0 0 15px 15px;
+            color: white;
         }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        
+        .login-info {
+            background-color: var(--pink-light);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: var(--purple-dark);
         }
-
-        .footer-content p {
-            color: #777777;
-            margin-top: 1rem;
+        
+        .no-posts {
+            text-align: center;
+            padding: 40px 0;
+            color: #888;
+            font-style: italic;
         }
-
-        /* Анимации */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-        }
-
-        .particle {
-            position: absolute;
-            background-color: rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-        }
-
-        /* Адаптивный дизайн */
+        
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.2rem;
+            .container {
+                margin: 10px;
+                padding: 15px;
             }
             
-            .section-title {
-                font-size: 2rem;
-            }
-            
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .logo h1 {
-                font-size: 1.5rem;
-            }
-            
-            .logo img {
-                height: 40px;
+            header h1 {
+                font-size: 2em;
             }
         }
     </style>
 </head>
 <body>
-    <header id="header">
-        <div class="header-container">
-            <div class="logo">
-                <img src="logo.jpg" alt="GenisysMax Logo">
-                <h1>GenisysMax</h1>
+    <div class="container">
+        <header>
+            <div class="hello-kitty"></div>
+            <div class="kitty-bow"></div>
+            <h1>Зал Славы Киры</h1>
+            <p>Личный блог ddkflyb</p>
+        </header>
+        
+        <div class="login-info">
+            Вход выполнен как: Кира (ddkflyb)
+        </div>
+        
+        <div class="post-form">
+            <h2>Создать новую запись</h2>
+            <div class="form-group">
+                <label for="post-title">Заголовок:</label>
+                <input type="text" id="post-title" placeholder="Введите заголовок...">
+            </div>
+            <div class="form-group">
+                <label for="post-content">Содержание:</label>
+                <textarea id="post-content" placeholder="Расскажите что-нибудь интересное..."></textarea>
+            </div>
+            <div class="form-group">
+                <label for="post-image">Прикрепить изображение:</label>
+                <input type="file" id="post-image" accept="image/*">
+            </div>
+            <button id="publish-btn">Опубликовать ✨</button>
+        </div>
+        
+        <h2 style="color: var(--purple-dark); text-align: center; margin: 30px 0 20px;">Мои записи</h2>
+        
+        <div class="posts-container" id="posts-container">
+            <div class="no-posts">
+                Пока нет записей. Создайте свою первую запись!
             </div>
         </div>
-    </header>
-
-    <section class="hero">
-        <div class="particles" id="particles"></div>
-        <div class="hero-content">
-            <h1>Альфа-релиз GenisysMax</h1>
-            <p>Открытое ядро для Minecraft PE серверов, вдохновлённое архитектурой GenisysPro. Полностью переработанное ядро с упором на стабильность, производительность и совместимость.</p>
-            <a href="#features" class="btn">Узнать больше</a>
-        </div>
-    </section>
-
-    <section class="features" id="features">
-        <h2 class="section-title">Ключевые особенности</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <h3>Широкая поддержка версий</h3>
-                <p>Поддержка версий Minecraft PE от 1.1 до 1.21. Сервер работает с широким спектром клиентов без необходимости в прокси или сторонних решений.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Максимальная оптимизация</h3>
-                <p>Упор на низкий отклик, экономию ресурсов и масштабируемость. Ядро оптимизировано для высокой производительности даже при большой нагрузке.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Стабильное API 3.28.0</h3>
-                <p>Удобно для разработчиков, с полной документацией и ясной архитектурой. Создавайте мощные плагины с минимальными усилиями.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Открытый исходный код</h3>
-                <p>GenisysMax доступен для изучения, модификации и развития вместе с сообществом. Присоединяйтесь к проекту и внесите свой вклад!</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta">
-        <div class="cta-content">
-            <h2>Готовы попробовать?</h2>
-            <p>Сейчас доступна альфа-версия. Ожидаются багфиксы и улучшения, но основа уже готова к использованию и разработке плагинов.</p>
-            <a href="https://github.com/GenisysMax/GenisysMax" class="btn" download>Скачать альфа-версию</a>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <img src="logo.jpg" alt="GenisysMax Logo" style="height: 40px; border-radius: 5px;">
-            <p>© 2025 GenisysMax. Все права защищены.</p>
-        </div>
-    </footer>
+        
+        <footer>
+            &copy; 2025 Зал Славы Киры | Все права защищены
+        </footer>
+    </div>
 
     <script>
-        // Анимация заголовка при прокрутке
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
+        // Объект для хранения всех постов в формате JSON
+        let blogPosts = [];
+        
+        // Загрузка постов из localStorage при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPosts();
+        });
+        
+        // Обработчик кнопки публикации
+        document.getElementById('publish-btn').addEventListener('click', function() {
+            publishPost();
+        });
+        
+        // Функция публикации нового поста
+        function publishPost() {
+            const titleInput = document.getElementById('post-title');
+            const contentInput = document.getElementById('post-content');
+            const imageInput = document.getElementById('post-image');
+            
+            // Проверка на заполнение полей
+            if (!titleInput.value.trim()) {
+                alert('Пожалуйста, введите заголовок поста!');
+                return;
+            }
+            
+            if (!contentInput.value.trim()) {
+                alert('Пожалуйста, введите содержание поста!');
+                return;
+            }
+            
+            // Создание нового поста
+            const newPost = {
+                id: Date.now(),
+                title: titleInput.value,
+                content: contentInput.value,
+                date: new Date().toISOString(),
+                author: 'ddkflyb',
+                image: null
+            };
+            
+            // Если выбрано изображение, обработаем его
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    newPost.image = e.target.result;
+                    addPostToList(newPost);
+                };
+                
+                reader.readAsDataURL(imageInput.files[0]);
             } else {
-                header.classList.remove('scrolled');
+                // Если изображения нет, просто добавляем пост
+                addPostToList(newPost);
             }
-        });
-
-        // Анимация появления карточек при прокрутке
-        document.addEventListener('DOMContentLoaded', function() {
-            const cards = document.querySelectorAll('.feature-card');
+        }
+        
+        // Добавление поста в список и сохранение
+        function addPostToList(post) {
+            // Добавляем новый пост в начало списка
+            blogPosts.unshift(post);
             
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('visible');
-                        }, index * 150);
-                    }
+            // Сохраняем обновленный список постов
+            savePosts();
+            
+            // Очищаем форму
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-content').value = '';
+            document.getElementById('post-image').value = '';
+            
+            // Обновляем отображение постов
+            displayPosts();
+            
+            // Сообщение об успешной публикации
+            alert('Пост успешно опубликован!');
+        }
+        
+        // Сохранение постов в localStorage
+        function savePosts() {
+            localStorage.setItem('kirasBlogPosts', JSON.stringify(blogPosts));
+            
+            // Генерация JSON файла для скачивания (для GitHub Pages)
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(blogPosts, null, 2));
+            
+            // Создаем скрытую ссылку для скачивания
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "blog-data.json");
+            downloadAnchorNode.style.display = "none";
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            document.body.removeChild(downloadAnchorNode);
+        }
+        
+        // Загрузка постов из localStorage
+        function loadPosts() {
+            const savedPosts = localStorage.getItem('kirasBlogPosts');
+            if (savedPosts) {
+                blogPosts = JSON.parse(savedPosts);
+                displayPosts();
+            }
+        }
+        
+        // Отображение постов на странице
+        function displayPosts() {
+            const postsContainer = document.getElementById('posts-container');
+            
+            // Очищаем контейнер
+            postsContainer.innerHTML = '';
+            
+            // Если постов нет, показываем сообщение
+            if (blogPosts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="no-posts">
+                        Пока нет записей. Создайте свою первую запись!
+                    </div>
+                `;
+                return;
+            }
+            
+            // Отображаем каждый пост
+            blogPosts.forEach(post => {
+                const postDate = new Date(post.date).toLocaleDateString('ru-RU', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
                 });
-            }, {
-                threshold: 0.1
+                
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+                postElement.innerHTML = `
+                    <div class="kitty-decoration"></div>
+                    <div class="post-header">
+                        <h2 class="post-title">${post.title}</h2>
+                        <div class="post-meta">
+                            <span>Автор: ${post.author}</span>
+                            <span>${postDate}</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p>${post.content.replace(/\n/g, '<br>')}</p>
+                        ${post.image ? `<img src="${post.image}" class="post-image" alt="Изображение к посту">` : ''}
+                    </div>
+                `;
+                
+                postsContainer.appendChild(postElement);
             });
+        }
+        
+        // Функция для экспорта данных блога в JSON файл для GitHub Pages
+        function exportBlogData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(blogPosts, null, 2));
             
-            cards.forEach(card => {
-                observer.observe(card);
-            });
-        });
-
-        // Создание частиц для фонового эффекта
-        document.addEventListener('DOMContentLoaded', function() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 50;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                // Случайные размеры и позиции
-                const size = Math.random() * 4 + 1;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const opacity = Math.random() * 0.5 + 0.1;
-                const delay = Math.random() * 5;
-                const duration = Math.random() * 20 + 10;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.opacity = opacity;
-                particle.style.animation = `fadeIn ${duration}s infinite ease-in-out ${delay}s alternate`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        });
-
-        // Плавная прокрутка для внутренних ссылок
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                
-                if (targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "blog-data.json");
+            downloadAnchorNode.style.display = "none";
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            document.body.removeChild(downloadAnchorNode);
+        }
     </script>
 </body>
 </html>
